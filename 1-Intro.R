@@ -1,7 +1,7 @@
 #  #######################################################################
 #       File-Name:      1-Intro.R
 #       Version:        R 3.4.3
-#       Date:           Dec 03, 2018
+#       Date:           Sep 04, 2018
 #       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
 #       Purpose:        Introduction to the basics of R, including
 #                       naming objects, indexing, creating lists & vectors
@@ -14,12 +14,12 @@ rm(list=ls()) # remove objects from R workspace
 
 getwd() # get current working directory 
 
-# save FileStructure.R in current working directory and run to reproduce folder structure
+# download FileStructure.R from this repository into current working directory and run to reproduce folder structure
 source("/Users/sumitra/FileStructure.R")
 
 # set working directory
 setwd("~/Dropbox/PSCI338/Code") # for macs
-# setwd("C:/Users/name/Dropbox/PSCI338") # for windows
+# setwd("C:\Users\name\Dropbox\PSCI338") # for windows
 
 # arithmetic and math operations
 2+2 # addition
