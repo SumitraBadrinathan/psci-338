@@ -1,5 +1,7 @@
 ## Statistics for Political Science (Penn PSCI 338)
 
+Instructor: [Marc Meredith](https://www.sas.upenn.edu/~marcmere/)
+
 The goal of this class is to expose students to the process by which quantitative political science research is conducted. The class has three separate, but related tracks. Track one will teach some basic tools necessary to conduct quantitative political science research. Topics covered will include descriptive statistics, sampling, probability and statistical theory, and regression analysis. Track two will teach how to implement some of these basic tools using the computer program R. Track three will teach some basics in research design. Topics will include independent and dependent variables, generating testable hypotheses, and issues in causality.
 
 This repository contains R code from lab sessions for the class. Topics by week are as follows:
