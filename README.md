@@ -24,5 +24,5 @@ This repository contains R code from lab sessions for the class. Topics by week 
 * Generalized linear models
 
 R version 3.4.3 (2017-11-30)
-Platform: x86_64-apple-darwin15.6.0 (64-bit)
-Running under: macOS  10.14
+<br>Platform: x86_64-apple-darwin15.6.0 (64-bit)
+<br>Running under: macOS  10.14
