@@ -6,9 +6,9 @@ The goal of this class is to expose students to the process by which quantitativ
 
 This repository contains R code from lab sessions for the class. Topics by week are as follows:
 
-* Introduction to R: basics of R, including naming objects, indexing, creating lists & vectors
+* Introduction to R: Basics of R including arithmetic, naming objects, indexing, creating lists & vectors
 
-* Reading in data and data manipulation
+* Reading in data and data manipulation: Reading in and manipulating data on Amnesty's International's assessment of state terror in 1994
 
 * Graphics and data visualization
 
