@@ -1,12 +1,7 @@
-# Download Dropbox for Desktop
-# Create a folder within called "PSCI338"
+# Sets the main folder
+mainDir <- "C:\Users\zachk\Dropbox\PSCI338"
 
-# Set the main folder (change username from "sumitra" to your own)
-mainDir <- "C:\Users\sumitra\Dropbox\PSCI338" # for PCs
-
-mainDir <- "/Users/sumitra/Dropbox/PSCI338" # for macs
-
-# Folder to save the .R files we create
+# Folder to save both the .Rmd and .hmtl files we create
 dir.create(file.path(mainDir, "Code")) 
 # Folder to save our data files
 dir.create(file.path(mainDir, "Data")) 
