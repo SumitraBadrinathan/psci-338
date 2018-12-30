@@ -1,4 +1,16 @@
-### Lab 3: Graphics I ###
+# #######################################################################
+#       File-Name:      2-DataManipulation.R
+#       Version:        R 3.4.3
+#       Date:           Sep 07, 2018
+#       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
+#       Purpose:        Reading in and manipulating data on Amnesty's
+#                       assessment of state terror in 1994
+#       Machine:        macOS  10.14
+# #######################################################################
+
+set.seed(1221)
+rm(list=ls()) # remove objects from R workspace
+
 
 
 # Set your own working directory (where the relevant files are)
