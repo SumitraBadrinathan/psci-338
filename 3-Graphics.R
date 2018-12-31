@@ -11,8 +11,6 @@
 set.seed(1221)
 rm(list=ls()) # remove objects from R workspace
 
-
-
 # Set your own working directory (where the relevant files are)
 setwd("~/Dropbox/PSCI338") #macs
 #setwd("C:/Users/name/Dropbox/PSCI338") #windows
