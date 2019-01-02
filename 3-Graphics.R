@@ -1,10 +1,10 @@
 # #######################################################################
-#       File-Name:      2-DataManipulation.R
+#       File-Name:      2-Graphics.R
 #       Version:        R 3.4.3
 #       Date:           Sep 07, 2018
 #       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
-#       Purpose:        Reading in and manipulating data on Amnesty's
-#                       assessment of state terror in 1994
+#       Purpose:        Simple data visualization with ANES 2016 data on 
+#                       people's opinions on the police and Black Lives Matter
 #       Machine:        macOS  10.14
 # #######################################################################
 
@@ -15,10 +15,9 @@ rm(list=ls()) # remove objects from R workspace
 setwd("~/Dropbox/PSCI338") #macs
 #setwd("C:/Users/name/Dropbox/PSCI338") #windows
 
-# Clears the workspace
-rm(list = ls())
-
 # read in the csv file
+# ANES 2016 data on people's opinions on the police and black lives matter
+# (higher = more favourable)
 anes <- read.csv("Data/Raw/ANES2016.csv")
 head(anes)
 
@@ -26,7 +25,7 @@ head(anes)
 summary(anes$police)
 
 # create a histogram of the police variable
-hist(anes$police) 
+hist(anes$police) # notice values higher than 100
 
 # clean police data & BLM data
 anes2 <- subset(anes, anes$police >=0 & anes$police <=100 & anes$BLM >=0 & anes$BLM<=100)
@@ -42,25 +41,25 @@ hist(anes2$police, breaks=20)
 hist(anes2$police, col="aquamarine2")
 
 # add main title to plot
-hist(anes2$police, col="lightpink", main="Feeling thermometer scores")
+hist(anes2$police, col="lightpink", main="Feeling Thermometer Scores")
 
 # add subtitle to plot
-hist(anes2$police, col="lightpink", main="Feeling thermometer scores", 
+hist(anes2$police, col="lightpink", main="Feeling Thermometer Scores", 
      sub="ANES 2016")
 
 # change x axis name
-hist(anes2$police, col="lightpink", main="Feeling thermometer scores", 
-     sub="ANES 2016", xlab="Feelings towards the police")
+hist(anes2$police, col="lightpink", main="Feeling Thermometer Scores", 
+     sub="ANES 2016", xlab="Feelings Towards the Police")
 
 # plot probability instead of frequency
-hist(anes2$police, col="lightpink", main="Feeling thermometer scores", 
-     sub="ANES 2016", xlab="Feelings towards the police", freq=FALSE)
+hist(anes2$police, col="lightpink", main="Feeling Thermometer Scores", 
+     sub="ANES 2016", xlab="Feelings Towards the Police", freq=FALSE)
 
-# similarly make a hist of BLM
+# similarly make a hist of Black Lives Matter
 hist(anes2$BLM)
 
 # how do dems and reps view BLM?
-
+# 1 = strong democrat, 7 = strong republican, 4 = independent
 dems <- subset(anes2, anes2$partyID>=1 & anes2$partyID<=3)
 reps <- subset(anes2, anes2$partyID>=5 & anes2$partyID<=7)
 
@@ -72,7 +71,7 @@ par(mfrow=c(1,2))
 hist(dems$BLM)
 hist(reps$BLM)
 
-# let's see how different party id values view BLM!
+# let's see how different party id values view BLM
 
 # create a subset of only strong democrats
 a <- subset(anes2, anes2$partyID==1)
@@ -85,6 +84,7 @@ median(a$BLM)
 # or other percentiles
 quantile(a$BLM, 0.75)
 
+# create subsets for other party IDs (we'll see a more efficient way to do this later)
 b <- subset(anes2, anes2$partyID==2)
 avg2 <- mean(b$BLM)
 c <- subset(anes2, anes2$partyID==3)
