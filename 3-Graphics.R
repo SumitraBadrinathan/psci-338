@@ -1,10 +1,10 @@
 # #######################################################################
-#       File-Name:      2-Graphics.R
+#       File-Name:      3-Graphics.R
 #       Version:        R 3.4.3
-#       Date:           Sep 07, 2018
+#       Date:           Sep 20, 2018
 #       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
-#       Purpose:        Simple data visualization with ANES 2016 data on 
-#                       people's opinions on the police and Black Lives Matter
+#       Purpose:        Simple graphics & data visualization with ANES 2016 
+#                       feeling thermometer data on the police and Black Lives Matter
 #       Machine:        macOS  10.14
 # #######################################################################
 
@@ -109,9 +109,69 @@ plot(means, type="o")
 plot(means, type="o", pch=16, cex=1.2)
 abline(v=4, col="red", lty=2)
 
-# we can also visualize this through a barplot
+#let's create a vector of means for police variable too
+means2 <- c(mean(a$police), mean(b$police), mean(c$police), mean(d$police), 
+                 mean(e$police), mean(f$police), mean(g$police))
+
+# do the same thing with a loop - fewer lines of code!
+meansPolice <- numeric(7)
+for(i in 1:7){
+  idx = which(anes2$partyID==i)
+  meansPolice[i] = mean(anes2$police[idx])
+}
+
+# easiest way to do this: use the aggregate function
+aggregate(anes2$police, by=anes2["partyID"], FUN=mean)
+
+# barplots
+par(mfrow=c(1,1)) #reset plotting window
+
+# create barplot
+barplot(meansBLM, col = "coral")
+barplot(meansPolice, col = "darkcyan", border=F) # remove border
+
+# plot means of both variables side by side
+combined <- rbind(meansBLM, meansPolice)
+
+barplot(combined) # this doesnt really give us what we want!
+
 dev.off()
-barplot(means)
+# barplot with colors and no  border
+bp <- barplot(combined, beside=T, col=c("coral", "darkcyan"), border=F)
+
+# add labels, change y axis limits, add main title
+bp <- barplot(combined, beside=T, col=c("coral", "darkcyan"), border=F, ylim=c(0,100),
+              names.arg=c("Strong dem.", "Dem.", "Weak dem.", "Indep.", "Weak Rep.", "Rep.", "Strong Rep."),
+              main=("Average feeling thermometer score by party ID"))
+# add text
+text(bp, combined, round(combined,1), pos=3, cex=0.8)
+# add legend
+legend("topleft",legend=c("Black Lives Matter", "Police"), 
+       cex=0.8, fill=c("coral", "darkcyan"), bty='n')
+
+# boxplots
+par(mfrow=c(1,2))
+boxplot(anes2$police)
+boxplot(anes2$BLM)
+
+# density plots 
+par(mfrow=c(1,1))
+# density of police
+plot(density(anes2$police), col="red")
+# dencity of both together
+lines(density(anes$BLM), col="blue")
+
+# density - a ggplot example
+library(ggplot2)
+ggplot(anes2, aes(x=police)) + geom_density() 
+
+# increase transparency, add color
+ggplot(anes2, aes(x=police)) + geom_density(fill="gold1", color="goldenrod2", alpha=0.4) 
+
+# plot both densities together
+ggplot() +
+  geom_density(aes(x=police), fill="coral", color="red", data=anes2, alpha=0.4) + 
+  geom_density(aes(x=BLM), fill="blue", color="blue", data=anes2, alpha=0.4)
 
 # check out this link for all  the cool R color options:
 # http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
