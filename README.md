@@ -12,7 +12,7 @@ This repository contains R code from lab sessions for the class. Topics by week 
 
 * Graphics and data visualization: Simple graphics & data visualization with ANES 2016 feeling thermometer data on the police and Black Lives Matter
 
-* Repeated iterations
+* Repeated iterations:  For loop syntax and examples
 
 * Distributions and monte carlo simulations
 
