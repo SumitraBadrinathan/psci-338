@@ -1,37 +1,52 @@
-setwd("~/Dropbox/PSCI338/")
+# #######################################################################
+#       File-Name:      6-Tables.R
+#       Version:        R 3.4.3
+#       Date:           Oct 15, 2018
+#       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
+#       Purpose:        Learn to make tables using the Stargazer package
+#       Machine:        macOS  10.14
+# #######################################################################
 
-options(scipen = 999)
+set.seed(1221)
+rm(list=ls()) # remove objects from R workspace
 
-rm(list=ls())
-getwd()
+# set working directory
+setwd("~/Dropbox/PSCI338") #macs
+#setwd("C:/Users/name/Dropbox/PSCI338") #windows
+
+# Download data file 31114820.dta from this repository and save it in the Data/Raw folder
+# The file has ABC/Washington Post public opinion data from Jan 2018
+# Codebook in repository ("Codebook31114820.pdf")
+
+# install package to read stata files
 install.packages("readstata13")
 library(readstata13)
 
 dataJan <- read.dta13("Data/Raw/31114820.dta")
 names(dataJan)
 
-table(dataJan$Q15) #trump and twitter
+# see a table summary of some relevant variables
+table(dataJan$Q15)  # do you think Trump's twitter performance helps or hurts him?
 table(dataJan$Q901) # ideology
-table(dataJan$Q921) #sex
-table(dataJan$Q910) #age
+table(dataJan$Q921) # sex
+table(dataJan$Q910) # age
 
+# subset out relevant variables
 new <- subset(dataJan, select=c("Q15", "Q921", "Q901", "Q910"))
 colnames(new) <- c("Twitter", "Sex", "Ideology", "Age")
 head(new)
  
-
 # making tables with stargazer
 install.packages("stargazer")
 library(stargazer) 
+
+# create a summary statistics table for all the variables in "new"
 stargazer(new, type="text")
-# notice that only age is in the table. any guesses why?
 
-
+# notice that only age is in the table. we have to convert the rest to numeric
 #recode ideology to numerical
 # recode such that dems = 1, indep = 2, reps = 3
-table(new$Ideology)
 new$PID <- NA
-# fill in this code
 new$PID[new$Ideology=="A Democrat"] <- 1
 new$PID[new$Ideology=="An Independent"] <- 2
 new$PID[new$Ideology=="A Republican"] <- 3
@@ -65,25 +80,5 @@ stargazer(new, type="text", title="table with new lables",
 # subset within stargazer
 stargazer(subset(new, new$Age<60), type="text")
 
-# difference in means
-# do dems and reps view trump's twitter performance differently?
-table(new$Twitter, new$PID)
-
-# recode twitter variable to numeric
-
-new$Tscore <- NA
-new$Tscore[new$Twitter=="Hurt"] <- 0
-new$Tscore[new$Twitter=="Help"] <- 1
-
-# recode democrat in orgininal dataset
-new$dems <- 0
-new$dems[new$PID==1] <- 1
-
-t.test(new$Tscore ~ new$dems)
-
-# run ols regression
-reg <- lm(Tscore~dems,  data=new)
-summary(reg)
-
-# output to table
-stargazer(reg)
+# remove type="text" to output latex code
+stargazer(new, title = "Descriptive Stats Table")
