@@ -1,10 +1,20 @@
-### Lab 4: Loops in R ###
+# #######################################################################
+#       File-Name:      4-Looping.R
+#       Version:        R 3.4.3
+#       Date:           Sep 27, 2018
+#       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
+#       Purpose:        For loop syntax and examples
+#       Machine:        macOS  10.14
+# #######################################################################
 
-# Clears the workspace
-rm(list = ls())
+set.seed(1229)
+rm(list=ls()) # remove objects from R workspace
 
-# 'for loops' let us repeat (loop) through the elements in a vector
-# and run the same code on each element
+# set working directory
+setwd("~/Dropbox/PSCI338") #macs
+#setwd("C:/Users/name/Dropbox/PSCI338") #windows
+
+# 'for loops' let us repeat (loop) through the elements in a vector and run the same code on each element
 
 # general loop syntax:
 
@@ -12,13 +22,11 @@ rm(list = ls())
 #  commands / condititons
 #  }
 
-
 # loop through the sequence 1 to 5 printing the square of each number
 for(a in 1:5)
 {
   print(a^2)
 }
-
 
 # vector in loop does not have to be sequential
 for(i in c(-3,6,2,5,9)){
@@ -53,7 +61,7 @@ for(i in 1:10) {
 for(i in 10:1) {
   print(rep("*",i)) }
 
-# notice that you cant use loop output to do anything eg mean, median
+# notice that you can't use loop output to do anything eg mean, median
 # let's fix this
 
 storage <- numeric(5) # create an empty vector to store loop results
@@ -79,22 +87,14 @@ for(DegC in degrees){
   print(c(DegC, DegF))
 }
 
-
 degrees <- c(0, 5, 10, 15, 20)
 begin = Sys.time()
 for(DegC in degrees){
   DegF = DegC*(9/5)+32
   print(c(DegC, DegF))
 }
-end = Sys.time()
-end-begin
 
-begin = Sys.time()
-DegF = degrees*(9/5)+32
-print(c(degrees, DegF))
-end = Sys.time()
-end-begin
-# fun for loop example 
+# fun for loop example (from Andreas Buja)
 
  dev.new()   # Create an external plot window; plotting inside RStudio is inefficient.
 a <- seq(0, 20*pi, length=1000) # Angles for traversing a spiral
