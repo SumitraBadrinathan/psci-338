@@ -11,13 +11,15 @@
 set.seed(1221)
 rm(list=ls()) # remove objects from R workspace
 
-# Set your own working directory (where the relevant files are)
+# set working directory
 setwd("~/Dropbox/PSCI338") #macs
 #setwd("C:/Users/name/Dropbox/PSCI338") #windows
 
+# Download data file ANES2016.csv from this repository and save it in the Data/Raw folder
+
 # read in the csv file
-# ANES 2016 data on people's opinions on the police and black lives matter
-# (higher = more favourable)
+# ANES 2016 feeling thermometer data on people's opinions on the police and Black Lives Matter
+# (scale of 1:100, higher = more favourable)
 anes <- read.csv("Data/Raw/ANES2016.csv")
 head(anes)
 
@@ -27,7 +29,7 @@ summary(anes$police)
 # create a histogram of the police variable
 hist(anes$police) # notice values higher than 100
 
-# clean police data & BLM data
+# clean police & BLM variables
 anes2 <- subset(anes, anes$police >=0 & anes$police <=100 & anes$BLM >=0 & anes$BLM<=100)
 summary(anes2$police)
 
@@ -55,10 +57,10 @@ hist(anes2$police, col="lightpink", main="Feeling Thermometer Scores",
 hist(anes2$police, col="lightpink", main="Feeling Thermometer Scores", 
      sub="ANES 2016", xlab="Feelings Towards the Police", freq=FALSE)
 
-# similarly make a hist of Black Lives Matter
+# similarly make a histogram of Black Lives Matter
 hist(anes2$BLM)
 
-# how do dems and reps view BLM?
+# how do Democrats and Republicans view Black Lives Matter?
 # 1 = strong democrat, 7 = strong republican, 4 = independent
 dems <- subset(anes2, anes2$partyID>=1 & anes2$partyID<=3)
 reps <- subset(anes2, anes2$partyID>=5 & anes2$partyID<=7)
@@ -71,7 +73,7 @@ par(mfrow=c(1,2))
 hist(dems$BLM)
 hist(reps$BLM)
 
-# let's see how different party id values view BLM
+# let's see how different party ID values view BLM
 
 # create a subset of only strong democrats
 a <- subset(anes2, anes2$partyID==1)
@@ -84,7 +86,7 @@ median(a$BLM)
 # or other percentiles
 quantile(a$BLM, 0.75)
 
-# create subsets for other party IDs (we'll see a more efficient way to do this later)
+# create subsets for other party IDs (we'll see a more efficient way to do this below)
 b <- subset(anes2, anes2$partyID==2)
 avg2 <- mean(b$BLM)
 c <- subset(anes2, anes2$partyID==3)
@@ -133,7 +135,7 @@ barplot(meansPolice, col = "darkcyan", border=F) # remove border
 # plot means of both variables side by side
 combined <- rbind(meansBLM, meansPolice)
 
-barplot(combined) # this doesnt really give us what we want!
+barplot(combined) # this doesn't really give us what we want!
 
 dev.off()
 # barplot with colors and no  border
@@ -154,7 +156,7 @@ par(mfrow=c(1,2))
 boxplot(anes2$police)
 boxplot(anes2$BLM)
 
-# density plots 
+# density 
 par(mfrow=c(1,1))
 # density of police
 plot(density(anes2$police), col="red")
@@ -164,16 +166,14 @@ lines(density(anes$BLM), col="blue")
 # density - a ggplot example
 library(ggplot2)
 ggplot(anes2, aes(x=police)) + geom_density() 
-
 # increase transparency, add color
 ggplot(anes2, aes(x=police)) + geom_density(fill="gold1", color="goldenrod2", alpha=0.4) 
-
 # plot both densities together
 ggplot() +
   geom_density(aes(x=police), fill="coral", color="red", data=anes2, alpha=0.4) + 
   geom_density(aes(x=BLM), fill="blue", color="blue", data=anes2, alpha=0.4)
 
-# check out this link for all  the cool R color options:
+# check out this link for all the cool R color options:
 # http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
 
 # close and clear plotting window
