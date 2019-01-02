@@ -14,7 +14,7 @@ This repository contains R code from lab sessions for the class. Topics by week 
 
 * Repeated iterations:  For loop syntax and examples
 
-* Distributions and monte carlo simulations
+* Distributions and monte carlo simulations: Normal and Uniform distributions + simulate the rolling of a die (Bonus: see how to simulate 100,000 trials of the fun game Orchard)
 
 * Tables 
 
