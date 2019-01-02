@@ -10,7 +10,7 @@ This repository contains R code from lab sessions for the class. Topics by week 
 
 * Reading in data and data manipulation: Reading in and manipulating data on Amnesty's International's assessment of state terror in 1994
 
-* Graphics and data visualization: 
+* Graphics and data visualization: Simple graphics & data visualization with ANES 2016 feeling thermometer data on the police and Black Lives Matter
 
 * Repeated iterations
 
