@@ -1,5 +1,5 @@
 # #######################################################################
-#       File-Name:      4-Looping.R
+#       File-Name:      4-Loops.R
 #       Version:        R 3.4.3
 #       Date:           Sep 27, 2018
 #       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
