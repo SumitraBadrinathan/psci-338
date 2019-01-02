@@ -16,7 +16,7 @@ This repository contains R code from lab sessions for the class. Topics by week 
 
 * Distributions and monte carlo simulations: Normal and Uniform distributions + simulate the rolling of a die (Bonus: see how to simulate 100,000 trials of the fun game Orchard)
 
-* Tables 
+* Tables: Learn to make descriptive stats tables using the Stargazer package
 
 * Linear models 
 
