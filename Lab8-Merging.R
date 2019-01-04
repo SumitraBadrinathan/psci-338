@@ -1,14 +1,30 @@
-### Lab 8 - Merging and reshaping ###
+# #######################################################################
+#       File-Name:      8-Merging.R
+#       Version:        R 3.4.3
+#       Date:           Nov 11, 2018
+#       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
+#       Purpose:        Stack, bind, merge and reshape data
+#       Machine:        macOS  10.14
+# #######################################################################
 
-rm(list=ls())
+set.seed(1221)
+rm(list=ls()) # remove objects from R workspace
+
+# set working directory
+setwd("~/Dropbox/PSCI338") #macs
+#setwd("C:/Users/name/Dropbox/PSCI338") #windows
+
+# load and install required packages
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(reshape2)
+
+# (from Marc Meredith)
 
 # sometimes we want to combine data
 # three ways to do this: (1) stack on top of each other, (2) place side-by-side,
 # or (3) merge together based on common variables.
 
 # Stacking 
-
-# Let's generate some fake data to illustrate combining data frames by stacking.
 
 first <- data.frame(x0=1:5, x1=rnorm(5),x2=c("M","F","M","F","F"))
 first
@@ -19,92 +35,78 @@ second
 third <- data.frame(x4=c(3,3,1,3,2), x5=c("e","g","v","b","z"))
 third
 
-# We can use the rbind() function to stack data frames. Make sure the number of 
-# columns match. Also, the names and classes of values being joined must match.
-# Here we stack the first, the second and then the first again:
+# we can use the rbind() function to stack data frames. Make sure the number of 
+# columns match. Also the names and classes of values being joined must match.
 rbind(first, second, first)
 
-class(rbind(first, second, first)) # still a data frame
-
-# Use the cbind function to combine data frames side-by-side:
+# use the cbind function to combine data frames side-by-side:
 cbind(first,third)
-
-class(cbind(first,third))
 
 # note: cbind does not require matching heights; if one data frame is shorter
 # it will recycle it. Notice below the third data frame is recycled.
 cbind(rbind(first,second),third)
 
-# However, if the number of rows of the shorter data frame does not evenly 
-# divide into the number of rows of the taller data frame, then R throws an 
-# error.
-
+# however, if the number of rows of the shorter data frame does not evenly 
+# divide into the number of rows of the taller data frame, you will get an error 
 cbind(rbind(first,second),third[-1,])
 
 # Merging
 
-# Let's create some more fake data to illustrate:
 left <- data.frame(id=c(2:7), y2=rnorm(6,100,5))
 left
 
 right <- data.frame(id=rep(1:4,each=2), z2=sample(letters,8, replace=TRUE))
 right
 
-# Data frames left and right have columns "id" in common. Let's merge them 
-# together based on id:
+# data frames left and right have columns "id" in common; they will merge automatically on "id" 
 merge(left, right)
 
-# Notice y2 from the left data frame is recycled to match up with multiple id in
+# notice y2 from the left data frame is recycled to match up with multiple id in
 # the right data frame. Also notice only rows with matching ids in both data
-# frames are retained. this is known as an INNER JOIN.
-# Only those records with matching "by" variables are joined.
+# frames are retained. this is known as an Inner Join
 
-# If we wanted to merge all rows regardless of match, we use the argument
-# all=TRUE. It is FALSE by default. This creates an OUTER JOIN.
+# if we wanted to merge all rows regardless of match, we use the argument
+# all=TRUE. It is FALSE by default. This creates an Outer Join
 merge(left, right, all=TRUE)
 
-# If we want to retain everything in the left data frame and merge only what 
+# if we want to retain everything in the left data frame and merge only what 
 # matches in the right data frame, we specify all.x=TRUE. This is known as a
-# LEFT JOIN.
+# Left Join.
 merge(left, right, all.x=TRUE)
 
 # If we want to retain everything in the right data frame and merge only what 
 # matches in the left data frame, we specify all.y=TRUE. This is known as a
-# RIGHT JOIN.
+# Right Join.
 merge(left, right, all.y=TRUE)
 
-# When merging two data frames that do not have matching column names, we can
+# when merging two data frames that do not have matching column names, we can
 # use the by.x and by.y arguments to specify columns to merge on.
 
-# Let's say we want to merge the first and left data frames by x0 and id. The
+# let's say we want to merge the first and left data frames by x0 and id. The
 # by.x and by.y arguments specify which columns to use for merging.
 
 merge(first, left, by.x="x0", by.y="id")
 
-#What if we don't specify columns to merge on?
+# what if we don't specify columns to merge on?
 merge(second, left)
 
 # Reshaping Data 
 
-# Examples:
-wide <- data.frame(name=c("Clay","Garrett","Addison"), 
+wide <- data.frame(name=c("NameA","NameB","NameC"), 
                    test1=c(78, 93, 90), 
                    test2=c(87, 91, 97),
                    test3=c(88, 99, 91))
+wide
 
 long <- data.frame(name=rep(c("Clay","Garrett","Addison"),each=3),
                    test=rep(1:3, 3),
                    score=c(78, 87, 88, 93, 91, 99, 90, 97, 91))
+long
 
-# wide to long
-install.packages("reshape2")
-library(reshape2)
-
-# The star function of the reshape2 package is melt(). It basically "melts" wide
-# data into long format.
-wide
+# change data from wide to long using the melt() function in the reshape2 package
 melt(wide, id.vars = "name", measure.vars = c("test1","test2","test3"))
 wide
+
 # melt and change col names
 melt(wide, id.vars = "name", measure.vars = c("test1","test2","test3"),
      variable.name = "test", value.name="score")
