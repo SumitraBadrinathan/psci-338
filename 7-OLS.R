@@ -1,29 +1,48 @@
-# Lab 7 Code : OLS
+# #######################################################################
+#       File-Name:      7-OLS.R
+#       Version:        R 3.4.3
+#       Date:           Oct 30, 2018
+#       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
+#       Purpose:        Run bivariate and multivariate OLS models + visualize 
+#                       regression results using FiveThirtyEight's hate crime data
+#       Machine:        macOS  10.14
+# #######################################################################
 
-setwd("~/Dropbox/PSCI338/")
+set.seed(1221)
+rm(list=ls()) # remove objects from R workspace
 
-rm(list=ls())
-dev.off()
-library(readstata13)
+# set working directory
+setwd("~/Dropbox/PSCI338") #macs
+#setwd("C:/Users/name/Dropbox/PSCI338") #windows
+
+# Download data file 31114820.dta from this repository and save it in the Data/Raw folder
+# The file has ABC/Washington Post public opinion data from Jan 2018
+# Codebook in repository ("Codebook31114820.pdf")
+
+# load and install required packages
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(stargazer, fivethirtyeight, ggplot2, dotwhisker)
+
+# read in the file
 dataJan <- read.dta13("Data/Raw/31114820.dta")
 
+# create subset of relevant variables (same as last lab)
 new <- subset(dataJan, select=c("Q15", "Q921", "Q901", "Q910", "income", "weight"))
-colnames(new) <- c("Twitter", "Sex", "Ideology", "Age", "Income", "Weight")
-head(new)
-summary(new$Sex)
+colnames(new) <- c("Twitter", "Sex", "PartyID", "Age", "Income", "Weight")
 
-#recode ideology to numerical
+# do democrats and republicans view Trump's twitter performance differently?
+# recall that "Twitter" variable asks respondents whether Trump's twitter performance is hurting or helping him
+
+# we can use a t-test or run a bivariate OLS model to test this
+
+# first recode PartyID to numeric
 # recode such that dems = 1, indep = 2, reps = 3
-table(new$Ideology)
+table(new$PartyID)
 new$PID <- NA
-new$PID[new$Ideology=="A Democrat"] <- 1
-new$PID[new$Ideology=="An Independent"] <- 2
-new$PID[new$Ideology=="A Republican"] <- 3
+new$PID[new$PartyID=="A Democrat"] <- 1
+new$PID[new$PartyID=="An Independent"] <- 2
+new$PID[new$PartyID=="A Republican"] <- 3
 table(new$PID)
-
-# difference in means
-# do dems and reps view trump's twitter performance differently?
-table(new$Twitter, new$PID)
 
 # recode twitter variable to numeric
 new$Tscore <- NA
@@ -34,7 +53,7 @@ new$Tscore[new$Twitter=="Help"] <- 1
 new$Dems <- 0
 new$Dems[new$PID==1] <- 1
 
-# recall from last class we did a t-test for diff in means
+# t test for difference in means
 t.test(new$Tscore ~ new$Dems)
 
 # bivariate OLS: produces the same result
@@ -48,7 +67,7 @@ summary(model2)
 # multivariate OLS
 table(new$Income)
 model3 <- lm(Tscore ~ Dems + Income,  data=new)
-summary(model3) # hard to interpret
+summary(model3) # income coefficients hard to interpret
 
 
 # reconstruct income to 3 categories: low, med, high (under 50, 50-75, 75-100)
@@ -72,22 +91,22 @@ class(new$IncomeCat)
 new$IncomeCat <- as.factor(new$IncomeCat)
 levels(new$IncomeCat)
 
-# relevel income
+# can relevel income if required
 new$IncomeCat <- relevel(new$IncomeCat, ref = 2)
 table(new$IncomeCat)
 
 model5 <- lm(Tscore~ Dems + IncomeCat,  data=new)
 summary(model5)
 
-# five thirty eight hate crime data
-install.packages("fivethirtyeight")
-library(fivethirtyeight)
- View(hate_crimes)
-hate_crimes
+# five thirty eight hate crime data from the "fivethirtyeight" package
+# this is the data used for 538 article linking hate crimes to income inequality 
+# https://fivethirtyeight.com/features/higher-rates-of-hate-crimes-are-tied-to-income-inequality/
+
+# within the package, hate crime data is stored in "hate_crimes"
 names(hate_crimes)
 
-# is income inequality related to hate crimes? 
-# write code for bivariate ols
+# is income inequality related to hate crimes, as the article says?
+
 reg1 <- lm(hate_crimes_per_100k_splc ~ gini_index, data=hate_crimes)
 summary(reg1)
 
@@ -101,7 +120,6 @@ which(hate_crimes$gini_index>0.52)
 hate_crimes[9,]
 
 # remove outlier and reshow regression
-
 noDC <- hate_crimes[-c(9), ] 
 dim(hate_crimes)
 dim(noDC)
@@ -109,46 +127,30 @@ dim(noDC)
 plot(noDC$gini_index, noDC$hate_crimes_per_100k_splc)
 
 reg2 <- lm(hate_crimes_per_100k_splc ~ gini_index, data=noDC) 
-summary(reg2) #not significant anymore.. 
+summary(reg2) # not significant anymore
 
 # what else could theoretically predict hate crimes?
-# share in trump vote. what is your theory?
+# share in trump vote? what is your theory?
 reg3 <-lm(hate_crimes_per_100k_splc ~ share_vote_trump, data=hate_crimes) 
 summary(reg3)
 
-# theorize why we have the relationship we do in the data
-
-# what variables could we add as controls? recall omitted variable bias:
-
-# omitted-variable bias occurs when a statistical model leaves out relevant variables. 
-# the bias results in the model attributing the effect of the missing variables to the estimated effects of the included variables.
-# specifically: omitted vars are those that are correlated with both the DV and one or more of the independent variables.
-
-
-
+# theorize why we have the inverse relationship in the data
+# what variables could we add as controls? recall omitted variable bias
 
 # new regression with possible omitted variables
 reg4 <-lm(hate_crimes_per_100k_splc ~ share_vote_trump + share_pop_metro + share_non_white, data=hate_crimes)
 summary(reg4)
 
-hate_crimes$trump100 <- (hate_crimes$share_vote_trump)*100
-reg5 <-lm(hate_crimes_per_100k_splc ~ trump100 + share_pop_metro + share_non_white, data=hate_crimes)
-summary(reg5)
-
 # regression output using stargazer
-library(stargazer)
 stargazer(reg4)
+# put two models together
 stargazer(reg3, reg4, type="text")
 
-#plot best fit line
+# plot best fit line
 plot(hate_crimes$share_vote_trump,hate_crimes$hate_crimes_per_100k_splc)
 abline(reg3, col="red", lty=2)
 
-# plot regression coefficients
-install.packages("ggplot2")
-library(ggplot2)
-library(dotwhisker)
-
+# plot regression coefficients using a dot-whisker plot
 dwplot(reg4)
 dwplot(list(reg3,reg4), show_intercept = TRUE)
 
