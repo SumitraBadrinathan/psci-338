@@ -8,13 +8,15 @@ This repository contains R code from lab sessions I taught for the class. Topics
 
 * Introduction to R: Basics of R including arithmetic, naming objects, indexing, creating lists & vectors
 
-* Reading in data and data manipulation: Reading in and manipulating data on Amnesty's International's assessment of state terror in 1994
+* Reading in data and data manipulation: Reading in and manipulating data on Amnesty's International's assessment of state terror in 1994; clean, subset, create new variables
 
 * Graphics and data visualization: Simple graphics & data visualization with ANES 2016 feeling thermometer data on the police and Black Lives Matter
 
 * Repeated iterations: For loop syntax and examples
 
-* Distributions and monte carlo simulations: Normal and Uniform distributions + simulate the rolling of a die (Bonus: see how to simulate 100,000 trials of the fun game Orchard)
+* Distributions & Monte Carlo simulations: Normal and Uniform distributions + simulate the rolling of a die 
+
+Bonus: see how to simulate 100,000 trials of the fun game Orchard. View success probability over varied N and strategy of play [here](https://sumitrabadrinathan.shinyapps.io/Orchard-Simulation/). Code in repository "Orchard.R" 
 
 * Tables: Make descriptive statistics tables using the Stargazer package
 
