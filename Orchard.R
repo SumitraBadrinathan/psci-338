@@ -1,10 +1,23 @@
+#  #######################################################################
+#       File-Name:      Orchard.R
+#       Version:        R 3.4.3
+#       Date:           Oct 15, 2018
+#       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
+#       Purpose:        Simulate 100,000 games of Orchard
+#       Machine:        macOS  10.14
+#  #######################################################################
 
+# The code below shows you how to simulate 100,000 games of Orchard. 
+# Over a large number of games, the probability of winning when the crow is allowed to move 4 steps 
+# and when your basket strategy is to pick the maximum fruit is ~ 46%
 
+# I also rolled up the process into a widget
+# Vary the # of games, strategy for choosing a fruit when you roll a basket, 
+# and difficulty level for the crow to see what happens to your probability of winning:
 
-#The code below shows you how to simulate 
-#100,000 games of Orchard. Over a large number of games, 
-#the probability of winning when the crow is allowed to move 4 steps and when your basket strategy 
-#is to pick the maximum fruit is $\approx 46 \%$
+# https://sumitrabadrinathan.shinyapps.io/Orchard-Simulation/
+
+# Orchard instructions here: https://habausa.files.wordpress.com/2018/04/3103.pdf
 
 numgames <- 100000
 numwon <- 0
@@ -73,17 +86,18 @@ for (i in 1:numgames) {
 output <- paste("We won", numwon, "out of the", numgames, " games that we simulated" )
 print(output)
 
-#This is not the only way to simulate this game! 
-#Below I will show you a way to do it with fewer lines of code. 
-#The main difference is that I am using the \texttt{sample()} function to approximate a die roll instead of \texttt{runif}. 
-#You can change the basket strategy to pick the minimum fruit (using \texttt{which.min()}) or to pick a random fruit (using \texttt{sample()}).
+# This is not the only way to simulate this game 
+# Below I will show you a way to do it with fewer lines of code. 
+# The main difference is that I am using the sample() function to approximate a die roll instead of runif()
+# You can change the basket strategy to pick the minimum fruit using which.min() 
+# or to pick a random fruit using sample()
 
 numgames <- 100000
 outcome <- numeric(numgames)
 crow_win <- c() 
 for (i in 1:numgames){
   no_of_fruits <- c(4,4,4,4,4)
-  count = 0 #add
+  count = 0 
   while (outcome[i] == 0){
     count = count + 1 
     side_select = sample(1:6,1)
