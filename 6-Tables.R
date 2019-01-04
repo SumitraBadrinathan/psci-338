@@ -14,13 +14,13 @@ rm(list=ls()) # remove objects from R workspace
 setwd("~/Dropbox/PSCI338") #macs
 #setwd("C:/Users/name/Dropbox/PSCI338") #windows
 
+# load and install required packages
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(readstata13, stargazer)
+
 # Download data file 31114820.dta from this repository and save it in the Data/Raw folder
 # The file has ABC/Washington Post public opinion data from Jan 2018
 # Codebook in repository ("Codebook31114820.pdf")
-
-# install package to read stata files
-install.packages("readstata13")
-library(readstata13)
 
 dataJan <- read.dta13("Data/Raw/31114820.dta")
 names(dataJan)
@@ -37,8 +37,6 @@ colnames(new) <- c("Twitter", "Sex", "Ideology", "Age")
 head(new)
  
 # making tables with stargazer
-install.packages("stargazer")
-library(stargazer) 
 
 # create a summary statistics table for all the variables in "new"
 stargazer(new, type="text")
