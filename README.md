@@ -16,7 +16,7 @@ This repository contains R code from lab sessions I taught for the class. Topics
 
 * Distributions & Monte Carlo simulations: Normal and Uniform distributions + simulate the rolling of a die 
 
-Bonus: see how to simulate 100,000 trials of the fun game Orchard. View success probability over varied N and strategy of play [here](https://sumitrabadrinathan.shinyapps.io/Orchard-Simulation/). Code in repository "Orchard.R" 
+<sub>Bonus: see how to simulate 100,000 trials of the fun game Orchard. View success probability over varied N and strategy of play [here](https://sumitrabadrinathan.shinyapps.io/Orchard-Simulation/). Code in repository "Orchard.R"</sub>
 
 * Tables: Make descriptive statistics tables using the Stargazer package
 
