@@ -1,36 +1,47 @@
-#--------------------------------------------------------------------------
-# PSCI338: Lab 9 Panel Data Example
-#--------------------------------------------------------------------------
+# #######################################################################
+#       File-Name:      8-PanelData.R
+#       Version:        R 3.4.3
+#       Date:           Nov 19, 2018
+#       Author:         Sumitra Badrinathan <sumitra@sas.upenn.edu>
+#       Purpose:        Using panel data to test the theory that alcohol
+#                       consumption increases fatalities while driving
+#       Machine:        macOS  10.14
+# #######################################################################
 
-setwd("~/Dropbox/PSCI338/")
+set.seed(1221)
+rm(list=ls()) # remove objects from R workspace
 
-# Clears the workspace
-rm(list = ls())
-dev.off()
+# set working directory
+setwd("~/Dropbox/PSCI338") #macs
+#setwd("C:/Users/name/Dropbox/PSCI338") #windows
 
-library(readstata13)
-library(stargazer)
-install.packages("multiwayvcov")
-library(multiwayvcov)
+# load and install required packages
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(readstata13, multiwayvcov, stargazer)
 
-# Reads in data
+# (from Marc Meredith)
+
+# download data file fatalities.dta from this repository and save it in the Data/Raw folder
+
+# read in data
 fatality <- read.dta13("Data/Raw/fatality.dta")
 mydata <- subset(fatality, select = c(state, year, spircons, beertax, vmiles, mrall, unus))
 
-# Displays the first few observations in the dataset
+# display the first few observations in the dataset
 head(mydata)
+# highway fatalities is stored in the variable "mrall"
 
-# Puts variables on a scale to make coefficients easier to interpret
+# put variables on a scale to make coefficients easier to interpret
 mydata$mrall <- mydata$mrall * 1000000
 mydata$vmiles<- mydata$vmiles / 1000
 stargazer(mydata, type = "text")
 
-# Shows Spirit Consumption by State Over Time
+# show Spirit Consumption by state over time
 plot(mydata$year, mydata$spircons, type="n", xlab = "Year", ylab = "Spirit Consumption")
 text(mydata$year, mydata$spircons, labels=as.character(mydata$state)) # text
-# if you fix the state, correlations within state over time (observations over time not independent)
+# observe correlations within state over time (observations over time not independent)
 
-# Shows beer tax by State Over Time
+# shows beer tax by state over time
 plot(mydata$year, mydata$beertax, type="n", xlab = "Year", ylab = "Tax Rate on Beer")
 text(mydata$year, mydata$beertax, labels=as.character(mydata$state)) # text
 
@@ -39,7 +50,8 @@ text(mydata$year, mydata$beertax, labels=as.character(mydata$state)) # text
 bivariate1 <- lm(mydata$mrall ~ mydata$spircons)
 bivariate1.variance <- vcov(bivariate1)
 bivariate1.stderrors <- sqrt(diag(bivariate1.variance))
-# cluster SE by state
+
+# cluster standard errors by state
 bivariate1.rvariance <- cluster.vcov(bivariate1 , mydata$state)
 bivariate1.rstderrors <- sqrt(diag(bivariate1.rvariance))
 
@@ -55,6 +67,7 @@ abline(bivariate1, col="red")
 bivariate2 <- lm(mydata$mrall ~ mydata$beertax)
 bivariate2.variance <- vcov(bivariate2)
 bivariate2.stderrors <- sqrt(diag(bivariate2.variance))
+
 # cluster SE by state
 bivariate2.rvariance <- cluster.vcov(bivariate2 , mydata$state)
 bivariate2.rstderrors <- sqrt(diag(bivariate2.rvariance))
@@ -78,17 +91,13 @@ beforeafter <- subset(mydata, year == 1982 | year == 1988)
 
 # add year fixed effects
 beforeafter$year <- as.factor(beforeafter$year)
-output1 <- lm(mrall ~ spircons + year, data = beforeafter) 
+oneway <- lm(mrall ~ spircons + year, data = beforeafter) 
 
 # add state fixed effects too: two way fixed effects
 beforeafter$state <- as.factor(beforeafter$state)
-output2 <- lm(mrall ~ spircons + year + state, data = beforeafter) 
+twoway <- lm(mrall ~ spircons + year + state, data = beforeafter) 
 
-
-#
-# Two-way fixed effects (i.e., state and year fixed effects)
-#
-
+# create comprehensive stargazer table of output
 output1 <- lm(mrall ~ beertax + state + year, data = mydata)
 output1.variance <- vcov(output1)
 output1.stderrors <- sqrt(diag(output1.variance))
@@ -111,4 +120,3 @@ stargazer(output1, output1, output2, output2,
           column.labels = c("OLS", "Clustered", "OLS", "Clustered"), 
           notes = "All regressions include state and year fixed effects", 
           notes.append = FALSE, notes.align = "l", type = "text")
-
