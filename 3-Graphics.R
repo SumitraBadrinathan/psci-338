@@ -15,7 +15,11 @@ rm(list=ls()) # remove objects from R workspace
 setwd("~/Dropbox/PSCI338") #macs
 #setwd("C:/Users/name/Dropbox/PSCI338") #windows
 
-# Download data file ANES2016.csv from this repository and save it in the Data/Raw folder
+# load and install required packages
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(ggplot2)
+
+# download data file ANES2016.csv from this repository and save it in the Data/Raw folder
 
 # read in the csv file
 # ANES 2016 feeling thermometer data on people's opinions on the police and Black Lives Matter
